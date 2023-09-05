@@ -225,7 +225,7 @@ const resetPasword = asyncHandler(async (req, res) => {
     const { password } = req.body;
     const { token } = req.params;
 
-    const hashtoken = crypto.createHash("sh256").update(token).digest("hex");
+    const hashtoken = crypto.createHash("sha256").update(token).digest("hex");
     const user = await User.findOne({
         passwordResetToken: hashtoken,
         passwordResetExpires: { $gt: Date.now() },
