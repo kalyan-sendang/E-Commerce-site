@@ -1,4 +1,5 @@
 const Product = require("../models/productModel")
+const User = require("../models/userModel")
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
 
@@ -77,7 +78,7 @@ const getallProduct = asyncHandler(async (req, res) => {
 
         let query = Product.find(JSON.parse(queryStr))//changes back to js object
 
-        //sorting 
+        //sorting
         if (req.query.sort) {
             const sortBy = req.query.sort.split(",").join(" ");
             query = query.sort(sortBy)
@@ -93,7 +94,7 @@ const getallProduct = asyncHandler(async (req, res) => {
             query = query.select('-__v')
         }
 
-        //pagination 
+        //pagination
         const page = req.query.page;
         const limit = req.query.limit;
         const skip = (page - 1) * limit;
@@ -111,13 +112,57 @@ const getallProduct = asyncHandler(async (req, res) => {
     }
 })
 
+//add to wishlist
 
+const addToWishList = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { prodId } = req.body;
+    try {
+        const user = await User.findById(_id);
+        const alreadyAdded = user.wishlist.find((id) => id.toString() === prodId)
+        if (alreadyAdded) {
+            let user = await User.findByIdAndUpdate(
+                _id,
+                {
+                    $pull: {
+                        wishlist: prodId
+                    },
+                },
+                {
+                    new: true
+                },
+            )
+            res.json(user)
+        } else {
+            let user = await User.findByIdAndUpdate(
+                _id,
+                {
+                    $push: {
+                        wishlist: prodId
+                    },
+                },
+                {
+                    new: true
+                }
+            )
+            res.json(user)
+        }
 
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+ //rating
 
+ const rating = asyncHandler(async(req, res)=>{
+
+ })
 module.exports = {
     createProduct,
     getaProduct,
     getallProduct,
     updateProduct,
     deleteProduct,
+    addToWishList,
+    rating,
 }
