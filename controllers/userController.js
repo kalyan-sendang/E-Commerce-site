@@ -73,6 +73,7 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
     })
 
 })
+
 //logout
 
 const logoutUser = asyncHandler(async (req, res) => {

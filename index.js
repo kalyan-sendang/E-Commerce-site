@@ -8,6 +8,8 @@ const authRouter = require("./routes/authRoutes");
 const productRouter = require("./routes/productRoutes")
 const blogRouter = require("./routes/blogRoutes")
 const categoryRouter = require("./routes/categoryRoutes")
+const blogcategoryRouter = require("./routes/blogcatRoutes")
+const brandRouter = require("./routes/brandRoutes")
 const { notfound, errorhandler } = require("./middlewares/errorHandler");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan")
@@ -23,6 +25,8 @@ app.use('/api/user', authRouter)
 app.use('/api/product', productRouter)
 app.use('/api/blog', blogRouter)
 app.use('/api/category', categoryRouter)
+app.use('/api/blogcategory', blogcategoryRouter)
+app.use('/api/brand', brandRouter)
 
 app.use(notfound);
 app.use(errorhandler);
